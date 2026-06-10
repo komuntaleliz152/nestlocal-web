@@ -16,7 +16,12 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 
-const navLinks = ["How it Works", "Features", "Testimonials", "Contact"];
+const navLinks = [
+  { label: "How it Works", href: "/#how-it-works" },
+  { label: "Features", href: "/#features" },
+  { label: "Testimonials", href: "/#testimonials" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -33,7 +38,16 @@ export default function Navbar() {
       <Container maxWidth="lg">
         <Toolbar sx={{ justifyContent: "space-between", py: 1 }}>
           {/* Logo */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box
+            component="a"
+            href="/"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              textDecoration: "none",
+            }}
+          >
             <HomeIcon sx={{ color: "#4B5320", fontSize: 28 }} />
             <Typography
               variant="h6"
@@ -52,8 +66,8 @@ export default function Navbar() {
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
             {navLinks.map((link) => (
               <Button
-                key={link}
-                href={`#${link.toLowerCase().replace(/\s/g, "-")}`}
+                key={link.label}
+                href={link.href}
                 sx={{
                   color: "#1A1A1A",
                   fontWeight: 500,
@@ -62,7 +76,7 @@ export default function Navbar() {
                   "&:hover": { color: "#4B5320" },
                 }}
               >
-                {link}
+                {link.label}
               </Button>
             ))}
           </Box>
@@ -71,7 +85,7 @@ export default function Navbar() {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Button
               variant="contained"
-              href="#waitlist"
+              href="/#waitlist"
               sx={{
                 backgroundColor: "#4B5320",
                 color: "#FFFFFF",
@@ -107,13 +121,13 @@ export default function Navbar() {
           <List>
             {navLinks.map((link) => (
               <ListItem
-                key={link}
+                key={link.label}
                 component="a"
-                href={`#${link.toLowerCase().replace(/\s/g, "-")}`}
+                href={link.href}
                 onClick={() => setDrawerOpen(false)}
               >
                 <ListItemText
-                  primary={link}
+                  primary={link.label}
                   sx={{ color: "#1A1A1A", fontWeight: 500 }}
                 />
               </ListItem>
@@ -122,7 +136,7 @@ export default function Navbar() {
               <Button
                 variant="contained"
                 fullWidth
-                href="#waitlist"
+                href="/#waitlist"
                 onClick={() => setDrawerOpen(false)}
                 sx={{
                   backgroundColor: "#4B5320",

@@ -8,15 +8,28 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 const footerLinks = [
   {
     title: "Company",
-    links: ["About Us", "How it Works", "Features", "Contact"],
+    links: [
+      { label: "How it Works", href: "/#how-it-works" },
+      { label: "Features", href: "/#features" },
+      { label: "Contact", href: "/contact" },
+    ],
   },
   {
     title: "Support",
-    links: ["FAQ", "Privacy Policy", "Terms of Service", "Help Center"],
+    links: [
+      { label: "FAQ", href: "/contact" },
+      { label: "Privacy Policy", href: "/contact" },
+      { label: "Terms of Service", href: "/contact" },
+      { label: "Help Center", href: "/contact" },
+    ],
   },
   {
     title: "Contact",
-    links: ["info@nestlocal.ug", "+256 700 000 000", "Kampala, Uganda"],
+    links: [
+      { label: "info@nestlocal.ug", href: "mailto:info@nestlocal.ug" },
+      { label: "+256 700 000 000", href: "tel:+256700000000" },
+      { label: "Kampala, Uganda", href: undefined },
+    ],
   },
 ];
 
@@ -80,15 +93,19 @@ export default function Footer() {
               <Stack spacing={1.5}>
                 {section.links.map((link) => (
                   <Typography
-                    key={link}
+                    key={link.label}
+                    component={link.href ? "a" : "span"}
+                    href={link.href}
                     variant="body2"
                     sx={{
                       color: "rgba(255,255,255,0.7)",
-                      cursor: "pointer",
-                      "&:hover": { color: "#FFFFFF" },
+                      cursor: link.href ? "pointer" : "default",
+                      textDecoration: "none",
+                      display: "block",
+                      "&:hover": link.href ? { color: "#FFFFFF" } : {},
                     }}
                   >
-                    {link}
+                    {link.label}
                   </Typography>
                 ))}
               </Stack>
