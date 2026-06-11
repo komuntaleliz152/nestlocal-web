@@ -30,10 +30,33 @@ const badges = [
 export default function Hero() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    setError("");
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? "Could not join waitlist. Please try again.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("Could not join waitlist. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -102,12 +125,14 @@ export default function Hero() {
             {/* Waitlist Form */}
             <form id="waitlist" onSubmit={handleSubmit}>
               {!submitted ? (
+                <Stack spacing={2}>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                   <TextField
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
                     required
                     fullWidth
                     sx={{
@@ -124,6 +149,7 @@ export default function Hero() {
                     type="submit"
                     variant="contained"
                     size="large"
+                    disabled={loading}
                     startIcon={<SearchIcon />}
                     sx={{
                       backgroundColor: "#4B5320",
@@ -136,8 +162,17 @@ export default function Hero() {
                       "&:hover": { backgroundColor: "#3A4118" },
                     }}
                   >
-                    Join Waitlist
+                    {loading ? "Joining..." : "Join Waitlist"}
                   </Button>
+                </Stack>
+                {error && (
+                  <Typography variant="body2" sx={{ color: "#c62828" }}>
+                    {error}
+                  </Typography>
+                )}
+                <Typography variant="caption" sx={{ color: "#666666" }}>
+                  We only use your email to notify you about NestLocal&apos;s launch. No spam.
+                </Typography>
                 </Stack>
               ) : (
                 <Box
